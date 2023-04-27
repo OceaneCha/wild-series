@@ -12,7 +12,7 @@ class ProgramController extends AbstractController
     public function index(): Response
     {
         return $this->render('program/index.html.twig', [
-            'controller_name' => 'ProgramController',
+            'website' => 'Wild Series',
         ]);
     }
 }
