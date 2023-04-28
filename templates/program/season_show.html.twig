@@ -18,14 +18,16 @@
 
             <p>Catégorie : {{ program.category.name }}</p>
 
-            {% if not program.seasons is empty %}
+            <h4>Saison {{season.number}}</h4>
+            
+            {% if not season.episodes is empty %}
                 <ul>
-                {% for season in program.seasons %}
-                    <li><a href="{{ path('program_season_show', { id: program.id, seasonId: season.id }) }}">Season {{season.number}}</a></li>
+                {% for episode in season.episodes %}
+                    <li>{{episode.number}}. {{episode.title}}</a></li>
                 {% endfor %}
                 </ul>
             {% else %}
-            <p>Aucune saison !</p>
+            <p>Aucun épisode !</p>
             {% endif %}
 
         </div>

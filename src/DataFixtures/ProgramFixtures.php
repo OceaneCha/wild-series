@@ -35,6 +35,11 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             'synopsis' => 'wow',
             'category' => 'Horreur',
         ],
+        [
+            'title' => 'Arcane',
+            'synopsis' => 'gay',
+            'category' => 'Animation',
+        ]
     ];
     public function load(ObjectManager $manager): void
     {
@@ -44,6 +49,7 @@ class ProgramFixtures extends Fixture implements DependentFixtureInterface
             $program->setSynopsis($currentProgram['synopsis']);
             $program->setCategory($this->getReference('category_' . $currentProgram['category']));
             $manager->persist($program);
+            $this->addReference('program_' . $currentProgram['title'], $program);
         }
 
         $manager->flush();
