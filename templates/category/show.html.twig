@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Wild Series{% endblock %}
+
+
+{% block body %}
+
+<h1>Séries {{ category.name }}</h1>
+
+<div class="row justify-content-center align-items-center">
+    {% for program in programs %}
+    <div class="col-4 card mx-2 mb-2">
+        <div class="card-header text-center"><h4><a href="{{ path("program_show", { id: program.id }) }}">{{program.title}}</a></h4></div>
+        <div class="card-body">{{program.synopsis}}</div>
+    </div>
+    {% else %}
+    <p>Aucune programme trouvé</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,8 +1,9 @@
 <div class="navbar navbar-expand-lg navbar-light bg-primary">
     <div class="container-fluid">
         <div class="navbar-nav">
-            <a class="nav-link bg-secondary rounded me-2" href="/">Home</a>
-            <a class="nav-link bg-secondary rounded me-2" href="/program">Programs</a>
+            <a class="nav-link bg-secondary rounded me-2" href="{{ path('app_index') }}">Home</a>
+            <a class="nav-link bg-secondary rounded me-2" href="{{ path('program_index') }}">Programs</a>
+            <a class="nav-link bg-secondary rounded me-2" href="{{ path('category_index') }}">Categories</a>
         </div>
     </div>
 </div>
