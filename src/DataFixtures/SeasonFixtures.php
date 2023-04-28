@@ -7,19 +7,36 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
+use Faker\Factory;
+
 class SeasonFixtures extends Fixture implements DependentFixtureInterface
 {
+    public const MAX_SEASONS = 5;
+
     public function load(ObjectManager $manager): void
     {
-        $season = new Season();
-        $season->setNumber(1);
-        $season->setProgram($this->getReference('program_Arcane'));
-        $season->setYear(2020);
-        $season->setDescription('Blahblah');
+        $faker = Factory::create();
 
-        $manager->persist($season);
+        // for ($i = 0; $i < 50; $i++) {
+        
+        foreach (ProgramFixtures::PROGRAMS as $program) {
+            $seasonNumber = 1;
 
-        $this->addReference('season1_Arcane', $season);
+            while ($seasonNumber <= self::MAX_SEASONS) {
+                $season = new Season();
+                $season->setNumber($seasonNumber);
+                $season->setYear($faker->year());
+                $season->setDescription($faker->paragraphs(3, true));
+                
+                $title = str_replace(' ', '', $program['title']);
+                $season->setProgram($this->getReference('program_' . $title));
+
+                $manager->persist($season);
+
+                $this->addReference('season_' . $seasonNumber . '_' . $title, $season);
+                $seasonNumber++;
+            }
+        }
 
         $manager->flush();
     }
