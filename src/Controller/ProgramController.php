@@ -8,10 +8,14 @@ use App\Entity\Season;
 use App\Form\ProgramType;
 use App\Repository\ProgramRepository;
 use App\Repository\SeasonRepository;
+use App\Service\ProgramDuration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -27,7 +31,7 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/new', name: 'new')]
-    public function new(Request $request, ProgramRepository $programRepository): Response
+    public function new(Request $request, ProgramRepository $programRepository, SluggerInterface $slugger): Response
     {
         $program = new Program();
 
@@ -36,6 +40,8 @@ class ProgramController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $slugger->slug($program->getTitle());
+            $program->setSlug($slug);
             $programRepository->save($program, true);
 
             return $this->redirectToRoute('program_index');
@@ -46,8 +52,8 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('/show/{program}', name: 'show', requirements: ['program' => '\d+'], methods: ['GET'])]
-    public function show(Program $program): Response
+    #[Route('/{slug}', name: 'show', methods: ['GET'])]
+    public function show(Program $program, ProgramDuration $programDuration): Response
     {
         if (!$program) {
             throw $this->createNotFoundException(
@@ -57,10 +63,11 @@ class ProgramController extends AbstractController
 
         return $this->render('program/show.html.twig', [
             'program' => $program,
+            'programDuration' => $programDuration->calculate($program),
         ]);
     }
 
-    #[Route('/show/{program}/seasons/{season}', name: 'season_show', requirements: ['program' => '\d+', 'season' => '\d+'], methods: ['GET'])]
+    #[Route('/{slug}/seasons/{season}', name: 'season_show', requirements: ['season' => '\d+'], methods: ['GET'])]
     public function showSeason(Program $program, Season $season): Response
     {        
         return $this->render('program/season_show.html.twig', [
@@ -69,7 +76,8 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('/show/{program}/season/{season}/episode/{episode}', name: 'episode_show')]
+    #[Route('/{slug}/season/{season}/episode/{episode_slug}', name: 'episode_show')]
+    #[ParamConverter('episode', options: ['mapping' => ['episode_slug' => 'slug']])]
     public function showEpisode(Program $program, Season $season, Episode $episode): Response
     {
         return $this->render('program/episode_show.html.twig', [

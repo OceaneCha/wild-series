@@ -21,7 +21,7 @@
             {% if not program.seasons is empty %}
                 <ul>
                 {% for season in program.seasons %}
-                    <li><a href="{{ path('program_season_show', { program: program.id, season: season.id }) }}">Season {{season.number}}</a></li>
+                    <li><a href="{{ path('program_season_show', { slug: program.slug, season: season.id }) }}">Season {{season.number}}</a></li>
                 {% endfor %}
                 </ul>
             {% else %}
@@ -37,6 +37,8 @@
                     <li>Aucun acteur pour cette série</li>
                 {% endfor %}
             </ul>
+
+            <strong>Durée totale : {{programDuration}}</strong>
 
         </div>
 
