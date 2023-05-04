@@ -1,0 +1,7 @@
+{% extends '_email.html.twig' %}
+
+{% block title %}New episode {{episode.title}} released!{% endblock %}
+
+{% block content %}
+<div>{{episode.title}}, a new episode for {{episode.season.program.title}}!</div>
+{% endblock %}
