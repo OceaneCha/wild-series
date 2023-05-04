@@ -46,7 +46,7 @@ class ProgramController extends AbstractController
         ]);
     }
 
-    #[Route('/show/{program}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[Route('/show/{program}', name: 'show', requirements: ['program' => '\d+'], methods: ['GET'])]
     public function show(Program $program): Response
     {
         if (!$program) {
