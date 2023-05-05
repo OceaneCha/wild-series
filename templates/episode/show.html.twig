@@ -31,4 +31,16 @@
     <a href="{{ path('app_episode_edit', {'slug': episode.slug}) }}">edit</a>
 
     {{ include('episode/_delete_form.html.twig') }}
+
+    {% if app.user %}
+        {% include 'comment/_form.html.twig' %}
+    {% endif %}
+
+    <ul>
+    {% for comment in episode.comments %}
+    <li>{{comment.author.email}}<br>Note: {{comment.rate}}<p>{{comment.comment}}</p></li>
+    {% else %}
+    <li>No comment!</li>
+    {% endfor %}
+    </ul>
 {% endblock %}
