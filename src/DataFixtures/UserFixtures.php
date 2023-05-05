@@ -22,6 +22,7 @@ class UserFixtures extends Fixture
         $admin->setRoles(['ROLE_ADMIN']);
         $pwd = $this->hasher->hashPassword($admin, 'admin');
         $admin->setPassword($pwd);
+        $this->addReference('user_1', $admin);
         $manager->persist($admin);
 
         $contributor = new User;
@@ -29,6 +30,7 @@ class UserFixtures extends Fixture
         $contributor->setRoles(['ROLE_CONTRIBUTOR']);
         $pwd = $this->hasher->hashPassword($contributor, 'user');
         $contributor->setPassword($pwd);
+        $this->addReference('user_2', $contributor);
         $manager->persist($contributor);
 
         $manager->flush();

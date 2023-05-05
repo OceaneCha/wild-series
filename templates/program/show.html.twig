@@ -40,6 +40,11 @@
 
             <strong>Durée totale : {{programDuration}}</strong>
 
+            {% if is_granted("ROLE_ADMIN") %}
+            <a href="{{ path('program_edit', { 'slug': program.slug} ) }}">Éditer</a>
+            {% endif %}
+
+
         </div>
 
     </div>

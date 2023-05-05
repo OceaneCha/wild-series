@@ -32,13 +32,17 @@
 
     {{ include('episode/_delete_form.html.twig') }}
 
-    {% if app.user %}
+    {% if is_granted('ROLE_CONTRIBUTOR') %}
         {% include 'comment/_form.html.twig' %}
     {% endif %}
 
     <ul>
     {% for comment in episode.comments %}
-    <li>{{comment.author.email}}<br>Note: {{comment.rate}}<p>{{comment.comment}}</p></li>
+    <li>{{comment.author.email}}
+        {% if (is_granted('ROLE_ADMIN') or comment.author == app.user) %}
+            {% include 'comment/_delete_form.html.twig' %}
+        {% endif %}
+        <br>Note: {{comment.rate}}<p>{{comment.comment}}</p></li>
     {% else %}
     <li>No comment!</li>
     {% endfor %}

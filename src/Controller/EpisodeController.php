@@ -72,7 +72,7 @@ class EpisodeController extends AbstractController
             $commentRepository->save($comment, true);
 
             // return $this->redirectToRoute('app_episode_show', ['slug' => $episode->getSlug()], Response::HTTP_SEE_OTHER);
-            return $this->redirectToRoute('app_episode_index');
+            return $this->redirectToRoute('app_episode_show', ['slug' => $episode->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('episode/show.html.twig', [
