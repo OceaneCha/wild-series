@@ -6,6 +6,14 @@
 
 {% block body %}
 
-<h1>{{ website }} index</h1>
+<h1>Latest Series</h1>
+
+<ul>
+{% for program in programs %}
+    <li><a href="{{ path('program_show', { slug: program.slug }) }}">{{program.title}}</a></li>
+{% else %}
+    <li>No program</li>
+{% endfor %}
+</ul>
 
 {% endblock %}

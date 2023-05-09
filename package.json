@@ -24,6 +24,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@popperjs/core": "^2.11.7",
         "mdb-ui-kit": "^6.2.0"
     }
 }

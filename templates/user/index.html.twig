@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Wild Series{% endblock %}
+
+
+{% block body %}
+
+<h1>Liste des commentaires</h1>
+
+<div class="row">
+    {% for comment in comments %}
+    <div class="col card">
+        <div class="card-header text-center"><h4>{{comment.episode.title}}</h4><br><span class="small">{{comment.episode.season.program.title}}</div>
+        <div class="card-body">{{comment.comment}}</div>
+        <div class="card-footer"></div>
+    </div>
+    {% else %}
+    <p>Aucun commentaire trouvé</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
