@@ -12,12 +12,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class EpisodeFixtures extends Fixture implements DependentFixtureInterface
 {
-    private SluggerInterface $slugger;
+    // private SluggerInterface $slugger;
 
     public const MAX_EPISODES = 10;
 
-    public function __construct(SluggerInterface $slugger) {
-        $this->slugger = $slugger;
+    public function __construct(private SluggerInterface $slugger) {
+        // $this->slugger = $slugger;
     }
 
     public function load(ObjectManager $manager): void

@@ -16,8 +16,6 @@ class SeasonFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
-
-        // for ($i = 0; $i < 50; $i++) {
         
         foreach (ProgramFixtures::PROGRAMS as $program) {
             $seasonNumber = 1;
