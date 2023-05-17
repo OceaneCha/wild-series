@@ -8,6 +8,12 @@
 
 <h1>Liste des séries</h1>
 
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<button>Search a program</button>
+{{ form_end(form) }}
+
+
 <a href="{{ path('program_new') }}">Add a new series</a>
 
 <div class="row">

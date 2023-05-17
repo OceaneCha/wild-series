@@ -6,6 +6,7 @@ use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
 use App\Form\ProgramType;
+use App\Form\SearchProgramType;
 use App\Repository\ProgramRepository;
 use App\Service\ProgramDuration;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,12 +22,21 @@ use Symfony\Component\Mime\Email;
 class ProgramController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(ProgramRepository $programRepository): Response
+    public function index(ProgramRepository $programRepository, Request $request): Response
     {
-        $programs = $programRepository->findAll();
+        $form = $this->createForm(SearchProgramType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $search = $form->getData()['search'];
+            $programs = $programRepository->findLikeName($search);
+        } else {
+            $programs = $programRepository->findAll();
+        }
 
         return $this->render('program/index.html.twig', [
             'programs' => $programs,
+            'form' => $form,
         ]);
     }
 
@@ -44,6 +54,8 @@ class ProgramController extends AbstractController
             $program->setSlug($slug);
             $program->setOwner($this->getUser());
             $programRepository->save($program, true);
+
+            $this->addFlash('success', 'The new program has been added!');
 
             $email = (new Email())
                         ->from($this->getParameter('mailer_from'))
@@ -114,7 +126,9 @@ class ProgramController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $programRepository->save($program, true);
 
-            return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'The program has been edited!');
+
+            return $this->redirectToRoute('program_show', ['slug' => $program->getSlug()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('program/edit.html.twig', [
@@ -128,6 +142,8 @@ class ProgramController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$program->getId(), $request->request->get('_token'))) {
             $programRepository->remove($program, true);
+
+            $this->addFlash('danger', 'The program has been deleted!');
         }
 
         return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
