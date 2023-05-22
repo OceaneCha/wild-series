@@ -5,10 +5,14 @@ namespace App\Controller;
 use App\Entity\Episode;
 use App\Entity\Program;
 use App\Entity\Season;
+use App\Entity\User;
 use App\Form\ProgramType;
 use App\Form\SearchProgramType;
 use App\Repository\ProgramRepository;
+use App\Repository\UserRepository;
 use App\Service\ProgramDuration;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +21,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Route('/program', name: 'program_')]
 class ProgramController extends AbstractController
@@ -147,5 +152,27 @@ class ProgramController extends AbstractController
         }
 
         return $this->redirectToRoute('program_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{slug}/watchlist', name: 'watchlist', methods: ['GET', 'POST'])]
+    public function addToWatchlist(Program $program, UserRepository $userRepository)
+    {
+        if (!$program) {
+            throw $this->createNotFoundException(
+                'No program with slug:' . $program->getSlug() . ' found.'
+            );
+        }
+
+        /** @var \App\Entity\User */
+        $user = $this->getUser();
+        if (!$user->isInWatchlist($program)) {
+            $user->addToWatchlist($program);
+        } else {
+            $user->removeFromWatchlist($program);
+        }
+        // $entityManager->flush();
+        $userRepository->save($user, true);
+
+        return $this->redirectToRoute('program_show', ['slug' => $program->getSlug()]);
     }
 }
