@@ -11,14 +11,13 @@ use App\Form\SearchProgramType;
 use App\Repository\ProgramRepository;
 use App\Repository\UserRepository;
 use App\Service\ProgramDuration;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -155,7 +154,7 @@ class ProgramController extends AbstractController
     }
 
     #[Route('/{slug}/watchlist', name: 'watchlist', methods: ['GET', 'POST'])]
-    public function addToWatchlist(Program $program, UserRepository $userRepository)
+    public function addToWatchlist(Program $program, UserRepository $userRepository): JsonResponse
     {
         if (!$program) {
             throw $this->createNotFoundException(
@@ -173,6 +172,9 @@ class ProgramController extends AbstractController
         // $entityManager->flush();
         $userRepository->save($user, true);
 
-        return $this->redirectToRoute('program_show', ['slug' => $program->getSlug()]);
+        // return $this->redirectToRoute('program_show', ['slug' => $program->getSlug()]);
+        return $this->json([
+            'isInWatchlist' => $user->isInWatchlist($program),
+        ]);
     }
 }
