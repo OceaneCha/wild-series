@@ -1,0 +1,10 @@
+home: Accueil
+programs: Séries
+categories: Catégories
+seasons: Saisons
+episodes: Episodes
+actors: Acteurs
+hello.username: Salut %username% !
+account.profile: Mon Profil
+account.logout: Se déconnecter
+account.login: Se connecter

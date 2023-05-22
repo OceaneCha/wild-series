@@ -1,28 +1,30 @@
 <div class="navbar navbar-expand-lg navbar-light bg-primary">
     <div class="container-fluid">
         <div class="navbar-nav">
-            <a class="nav-link bg-secondary rounded me-2" href="{{ path('app_index') }}">Home</a>
-            <a class="nav-link bg-secondary rounded me-2" href="{{ path('program_index') }}">Programs</a>
-            <a class="nav-link bg-secondary rounded me-2" href="{{ path('category_index') }}">Categories</a>
-            <a class="nav-link bg-secondary rounded me-2" href="{{ path('app_season_index') }}">Seasons</a>
-            <a class="nav-link bg-secondary rounded me-2" href="{{ path('app_episode_index') }}">Episodes</a>
-            <a class="nav-link bg-secondary rounded me-2" href="{{ path('actor_index') }}">Actors</a>
+            <a class="nav-link bg-secondary rounded me-2" href="{{ path('app_index') }}">{{ 'home'|trans }}</a>
+            <a class="nav-link bg-secondary rounded me-2" href="{{ path('program_index') }}">{{ 'programs'|trans }}</a>
+            <a class="nav-link bg-secondary rounded me-2" href="{{ path('category_index') }}">{{ 'categories'|trans }}</a>
+            <a class="nav-link bg-secondary rounded me-2" href="{{ path('app_season_index') }}">{{ 'seasons'|trans }}</a>
+            <a class="nav-link bg-secondary rounded me-2" href="{{ path('app_episode_index') }}">{{ 'episodes'|trans }}</a>
+            <a class="nav-link bg-secondary rounded me-2" href="{{ path('actor_index') }}">{{ 'actors'|trans }}</a>
         </div>
     </div>
 
     {% if app.user %}
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-            {{app.user.email}}
+            {% trans with {'%username%': app.user.email} %}
+                hello.username
+            {% endtrans %}
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ path('app_user_profile' )}}">My Profile</a></li>
-            <li><a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a></li>
+            <li><a class="dropdown-item" href="{{ path('app_user_profile' )}}">{{ 'account.profile'|trans }}</a></li>
+            <li><a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'account.logout'|trans }}</a></li>
         </ul>
     </div>
     {% else %}
     <div>
-        <a class="text-white" href="{{ path('app_login') }}">Login</a>
+        <a class="text-white" href="{{ path('app_login') }}">{{ 'account.login'|trans }}</a>
     </div>
     {% endif %}
 </div>

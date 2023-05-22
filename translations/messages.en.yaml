@@ -1,0 +1,10 @@
+home: Home
+programs: Programs
+categories: Categories
+seasons: Seasons
+episodes: Episodes
+actors: Actors
+hello.username: Hiya %username%!
+account.profile: My Profile
+account.logout: Logout
+account.login: Login
